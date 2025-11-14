@@ -1,13 +1,18 @@
 "use client";
 import { useState, useEffect, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { fetchMarketingData } from '../../src/lib/api';
 import { MarketingData } from '../../src/types/marketing';
 import { Navbar } from '../../src/components/ui/navbar';
 import { Footer } from '../../src/components/ui/footer';
-import { BubbleMap } from '../../src/components/ui/bubble-map';
 import { CardMetric } from '../../src/components/ui/card-metric';
 import { Table } from '../../src/components/ui/table';
 import { MapPin, DollarSign, TrendingUp, Activity, Globe } from 'lucide-react';
+
+const BubbleMap = dynamic(
+  () => import('../../src/components/ui/bubble-map').then(mod => ({ default: mod.BubbleMap })),
+  { ssr: false, loading: () => <div className="h-96 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400">Loading map...</div> }
+);
 
 export default function RegionView() {
   const [marketingData, setMarketingData] = useState<MarketingData | null>(null);
